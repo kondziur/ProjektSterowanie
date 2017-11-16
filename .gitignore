@@ -1,0 +1,6 @@
+.pioenvs
+.piolibdeps
+.vscode/c_cpp_properties.json
+.travis.yml
+launch.json
+lib/readme.txt
