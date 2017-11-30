@@ -1,8 +1,19 @@
 #include <Arduino.h>
+#include <string.h>
+// Zmienne do pobierania liczby kroków od użytkownika
+
+String a;
+char b;
+
+// Zmienne przechowujące stan krańcówek
 int buttonX;
 int buttonY;
 int buttonZ;
-int a, kroki = 0;
+// Zmienne przechowujące ilosc pozostalych krokow
+int KrokiX = 0;
+int KrokiY = 0;
+int KrokiZ = 0;
+
 #define speed 1000
 
 #define esX 2
@@ -76,42 +87,88 @@ void loop()
 
     while (Serial.available())
     {
-        a = Serial.parseInt();
-        if (a > 0)
+        b = Serial.read();
+        a = a + b;
+        if (b == '\n')
         {
-            kroki = a;
+            sscanf(a.c_str(), "x %d y %d z %d", &KrokiX, &KrokiY, &KrokiZ);
+
+            Serial.print("KrokiX = ");
+            Serial.print(KrokiX);
+            Serial.print(", KrokiY = ");
+            Serial.print(KrokiY);
+            Serial.print(", KrokiZ = ");
+            Serial.print(KrokiZ);
+            Serial.print("\n");
+            a = String("");
+            break;
         }
     }
+    // Niezaleznie od wartosci krokow silniki zawsze ida w gore
+        if (KrokiX < 0)
+        {
+            KrokiX *= -1;
+            digitalWrite(X_DIR_PIN,HIGH);
+        }
+        else
+        {
+            digitalWrite(X_DIR_PIN,LOW);
+        }
+        if (KrokiY < 0)
+        {
+            KrokiY *= -1;
+            digitalWrite(Y_DIR_PIN,HIGH);
+        }
+                else
+        {
+            digitalWrite(Y_DIR_PIN,LOW);
+        }
+        if (KrokiZ < 0)
+        {
+            KrokiZ *= -1;
+            digitalWrite(Z_DIR_PIN,HIGH);
+        }
+                else
+        {
+            digitalWrite(Z_DIR_PIN,LOW);
+        }
 
-    // put your main code here, to run repeatedly:
     buttonX = digitalRead(esX);
     buttonY = digitalRead(esY);
     buttonZ = digitalRead(esZ);
-    // Serial.print("End stop XYZ values: ");
 
-    // Serial.print(buttonX);
-    // Serial.print(buttonY);
-    // Serial.print(buttonZ);
-    // Serial.print("\r\n");
-
-    if (buttonX == 0 && kroki > 0)
+    if (buttonX == 0 && KrokiX > 0)
     {
-        digitalWrite(X_STEP_PIN, LOW);
+        digitalWrite(X_STEP_PIN, HIGH);
+        KrokiX--;
     }
-    if (buttonY == 0 && kroki > 0)
+    if (buttonY == 0 && KrokiY > 0)
     {
-        digitalWrite(Y_STEP_PIN, LOW);
+        digitalWrite(Y_STEP_PIN, HIGH);
+        KrokiY--;
     }
-    if (buttonZ == 0 && kroki > 0)
+    if (buttonZ == 0 && KrokiZ > 0)
     {
-        digitalWrite(Z_STEP_PIN, LOW);
+        digitalWrite(Z_STEP_PIN, HIGH);
+        KrokiZ--;
     }
 
-    if (kroki > 0)
-        kroki--;
+    if (buttonX == 1 && digitalRead(X_DIR_PIN) == LOW)
+    {
+        KrokiX = 0;
+    }
+    if (buttonY == 1 && digitalRead(Y_DIR_PIN) == LOW)
+    {
+        KrokiY = 0;
+    }
+    if (buttonZ == 1 && digitalRead(Z_DIR_PIN) == LOW)
+    {
+        KrokiZ = 0;
+    }
+
     delayMicroseconds(speed);
-    digitalWrite(X_STEP_PIN, HIGH);
-    digitalWrite(Y_STEP_PIN, HIGH);
-    digitalWrite(Z_STEP_PIN, HIGH);
+    digitalWrite(X_STEP_PIN, LOW);
+    digitalWrite(Y_STEP_PIN, LOW);
+    digitalWrite(Z_STEP_PIN, LOW);
     delayMicroseconds(speed);
 }
