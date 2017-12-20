@@ -1,18 +1,5 @@
 #include <Arduino.h>
 #include <string.h>
-// Zmienne do pobierania liczby kroków od użytkownika
-
-String a;
-char b;
-
-// Zmienne przechowujące stan krańcówek
-int buttonX;
-int buttonY;
-int buttonZ;
-// Zmienne przechowujące ilosc pozostalych krokow
-int KrokiX = 0;
-int KrokiY = 0;
-int KrokiZ = 0;
 
 #define speed 1000
 
@@ -36,139 +23,193 @@ int KrokiZ = 0;
 #define Z_ENABLE_PIN 62
 #define Z_CS_PIN 40
 
+// Zmienne do pobierania liczby krok�w od u�ytkownika
+String ZawartoscBufora;
+char NowyZnak;
+
+// Zmienne przechowuj�ce stan kra�c�wek
+int buttonX;
+int buttonY;
+int buttonZ;
+
+// Zmienne przechowuj�ce ilosc pozostalych krokow
+int KrokiX = 0;
+int KrokiY = 0;
+int KrokiZ = 0;
+
+void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ);
+
 void setup()
 {
-    Serial.begin(9600);
-    //WYŁĄCZNIKI KRAŃCOWE
-    // krańcówka X
-    pinMode(esX, INPUT);
-    digitalWrite(esX, HIGH);
+	/* Uruchomienie portu szeregowego */
+	Serial.begin(9600);
 
-    //krańcówka Y
-    pinMode(esY, INPUT);
-    digitalWrite(esY, HIGH);
+	/* Konfiguracja pin�w */
+	// Piny zwi�zane z kra�c�wkami
+	// Kra�c�wka X
+	pinMode(esX, INPUT);
+	digitalWrite(esX, HIGH);
 
-    //krańcówka Z
-    pinMode(esZ, INPUT);
-    digitalWrite(esZ, HIGH);
+	// Kra�c�wka Y
+	pinMode(esY, INPUT);
+	digitalWrite(esY, HIGH);
 
-    //krańcówka dodatkowa
-    pinMode(esADD, INPUT);
-    digitalWrite(esADD, HIGH);
+	// Kra�c�wka Z
+	pinMode(esZ, INPUT);
+	digitalWrite(esZ, HIGH);
 
-    //STEROWANIE SILNIKAMI KROKOWYMI
-    pinMode(X_DIR_PIN, OUTPUT);
-    digitalWrite(X_DIR_PIN, LOW);
-    pinMode(X_ENABLE_PIN, OUTPUT);
-    digitalWrite(X_ENABLE_PIN, LOW);
-    pinMode(X_CS_PIN, OUTPUT);
-    digitalWrite(X_CS_PIN, HIGH);
-    pinMode(X_STEP_PIN, OUTPUT);
+	// Dodatkowa kra�c�wka
+	pinMode(esADD, INPUT);
+	digitalWrite(esADD, HIGH);
 
-    pinMode(Y_DIR_PIN, OUTPUT);
-    digitalWrite(Y_DIR_PIN, LOW);
-    pinMode(Y_ENABLE_PIN, OUTPUT);
-    digitalWrite(Y_ENABLE_PIN, LOW);
-    pinMode(Y_CS_PIN, OUTPUT);
-    digitalWrite(Y_CS_PIN, HIGH);
-    pinMode(Y_STEP_PIN, OUTPUT);
+	// Piny s�u��ce do sterowania silnikami krokowymi
+	// Silnik X
+	pinMode(X_DIR_PIN, OUTPUT);
+	digitalWrite(X_DIR_PIN, LOW);
+	pinMode(X_ENABLE_PIN, OUTPUT);
+	digitalWrite(X_ENABLE_PIN, LOW);
+	pinMode(X_CS_PIN, OUTPUT);
+	digitalWrite(X_CS_PIN, HIGH);
+	pinMode(X_STEP_PIN, OUTPUT);
 
-    pinMode(Z_DIR_PIN, OUTPUT);
-    digitalWrite(Z_DIR_PIN, LOW);
-    pinMode(Z_ENABLE_PIN, OUTPUT);
-    digitalWrite(Z_ENABLE_PIN, LOW);
-    pinMode(Z_CS_PIN, OUTPUT);
-    digitalWrite(Z_CS_PIN, HIGH);
-    pinMode(Z_STEP_PIN, OUTPUT);
+	// Silnik Y
+	pinMode(Y_DIR_PIN, OUTPUT);
+	digitalWrite(Y_DIR_PIN, LOW);
+	pinMode(Y_ENABLE_PIN, OUTPUT);
+	digitalWrite(Y_ENABLE_PIN, LOW);
+	pinMode(Y_CS_PIN, OUTPUT);
+	digitalWrite(Y_CS_PIN, HIGH);
+	pinMode(Y_STEP_PIN, OUTPUT);
+
+	// Silnik Z
+	pinMode(Z_DIR_PIN, OUTPUT);
+	digitalWrite(Z_DIR_PIN, LOW);
+	pinMode(Z_ENABLE_PIN, OUTPUT);
+	digitalWrite(Z_ENABLE_PIN, LOW);
+	pinMode(Z_CS_PIN, OUTPUT);
+	digitalWrite(Z_CS_PIN, HIGH);
+	pinMode(Z_STEP_PIN, OUTPUT);
 }
 
 void loop()
 {
+	/* Wczytanie danych podanych na port szeregowy */
+	while (Serial.available())
+	{
+		NowyZnak = Serial.read();
+		ZawartoscBufora = ZawartoscBufora + NowyZnak;
+		if (NowyZnak == '\n')
+		{
+			sscanf(ZawartoscBufora.c_str(), "x %d y %d z %d", &KrokiX, &KrokiY, &KrokiZ);
 
-    while (Serial.available())
-    {
-        b = Serial.read();
-        a = a + b;
-        if (b == '\n')
-        {
-            sscanf(a.c_str(), "x %d y %d z %d", &KrokiX, &KrokiY, &KrokiZ);
+			Serial.print("KrokiX = ");
+			Serial.print(KrokiX);
+			Serial.print(", KrokiY = ");
+			Serial.print(KrokiY);
+			Serial.print(", KrokiZ = ");
+			Serial.print(KrokiZ);
+			Serial.print("\n");
 
-            Serial.print("KrokiX = ");
-            Serial.print(KrokiX);
-            Serial.print(", KrokiY = ");
-            Serial.print(KrokiY);
-            Serial.print(", KrokiZ = ");
-            Serial.print(KrokiZ);
-            Serial.print("\n");
-            a = String("");
-            break;
-        }
-    }
-    // Niezaleznie od wartosci krokow silniki zawsze ida w gore
-        if (KrokiX < 0)
-        {
-            KrokiX *= -1;
-            digitalWrite(X_DIR_PIN,HIGH);
-        }
-        else
-        {
-            digitalWrite(X_DIR_PIN,LOW);
-        }
-        if (KrokiY < 0)
-        {
-            KrokiY *= -1;
-            digitalWrite(Y_DIR_PIN,HIGH);
-        }
-                else
-        {
-            digitalWrite(Y_DIR_PIN,LOW);
-        }
-        if (KrokiZ < 0)
-        {
-            KrokiZ *= -1;
-            digitalWrite(Z_DIR_PIN,HIGH);
-        }
-                else
-        {
-            digitalWrite(Z_DIR_PIN,LOW);
-        }
+			ZawartoscBufora = String("");
 
-    buttonX = digitalRead(esX);
-    buttonY = digitalRead(esY);
-    buttonZ = digitalRead(esZ);
-
-    if (buttonX == 0 && KrokiX > 0)
-    {
-        digitalWrite(X_STEP_PIN, HIGH);
-        KrokiX--;
-    }
-    if (buttonY == 0 && KrokiY > 0)
-    {
-        digitalWrite(Y_STEP_PIN, HIGH);
-        KrokiY--;
-    }
-    if (buttonZ == 0 && KrokiZ > 0)
-    {
-        digitalWrite(Z_STEP_PIN, HIGH);
-        KrokiZ--;
-    }
-
-    if (buttonX == 1 && digitalRead(X_DIR_PIN) == LOW)
-    {
-        KrokiX = 0;
-    }
-    if (buttonY == 1 && digitalRead(Y_DIR_PIN) == LOW)
-    {
-        KrokiY = 0;
-    }
-    if (buttonZ == 1 && digitalRead(Z_DIR_PIN) == LOW)
-    {
-        KrokiZ = 0;
-    }
-
-    delayMicroseconds(speed);
-    digitalWrite(X_STEP_PIN, LOW);
-    digitalWrite(Y_STEP_PIN, LOW);
-    digitalWrite(Z_STEP_PIN, LOW);
-    delayMicroseconds(speed);
+			PrzemiescSilniki(KrokiX, KrokiY, KrokiZ);
+			// break;
+		}
+	}
 }
+
+void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ)
+{
+	/* Realizacja ruchu */
+	// - Dopasowanie kierunku ruchu do wartoci krok�w -
+	// Silnik X
+	if (IloscKrokowX < 0)
+	{
+		IloscKrokowX *= -1;
+		digitalWrite(X_DIR_PIN, HIGH);
+	}
+	else
+	{
+		digitalWrite(X_DIR_PIN, LOW);
+	}
+
+	// Silnik Y
+	if (IloscKrokowY < 0)
+	{
+		IloscKrokowY *= -1;
+		digitalWrite(Y_DIR_PIN, HIGH);
+	}
+	else
+	{
+		digitalWrite(Y_DIR_PIN, LOW);
+	}
+
+	// Silnik Z
+	if (IloscKrokowZ < 0)
+	{
+		IloscKrokowZ *= -1;
+		digitalWrite(Z_DIR_PIN, HIGH);
+	}
+	else
+	{
+		digitalWrite(Z_DIR_PIN, LOW);
+	}
+
+	// - Pętla realizująca ruch -
+	while (IloscKrokowX > 0 || IloscKrokowY > 0 || IloscKrokowZ > 0)
+	{
+		// Zabezpieczenie silników przed poruszeniem się przy wciniętych krańcówkach
+		// Wczytanie wartoci pinów związanych z krańcówkami
+		buttonX = digitalRead(esX);
+		buttonY = digitalRead(esY);
+		buttonZ = digitalRead(esZ);
+
+		// Silnik X
+		if (buttonX == 1 && digitalRead(X_DIR_PIN) == LOW)
+		{
+			IloscKrokowX = 0;
+		}
+		// Silnik Y
+		if (buttonY == 1 && digitalRead(Y_DIR_PIN) == LOW)
+		{
+			IloscKrokowY = 0;
+		}
+		// Silnik Z
+		if (buttonZ == 1 && digitalRead(Z_DIR_PIN) == LOW)
+		{
+			IloscKrokowZ = 0;
+		}
+
+		// Wystawienie jedynek na piny związane z poruszaniem silnikami
+		// Silnik X
+		if (IloscKrokowX > 0)
+		{
+			digitalWrite(X_STEP_PIN, HIGH);
+			IloscKrokowX--;
+		}
+		// Silnik Y
+		if (IloscKrokowY > 0)
+		{
+			digitalWrite(Y_STEP_PIN, HIGH);
+			IloscKrokowY--;
+		}
+		// Silnik Z
+		if (IloscKrokowZ > 0)
+		{
+			digitalWrite(Z_STEP_PIN, HIGH);
+			IloscKrokowZ--;
+		}
+		// Opóźnienie
+
+		delayMicroseconds(speed);
+
+		// Wystawienie zer na piny związane z poruszaniem silnikami
+		digitalWrite(X_STEP_PIN, LOW);
+		digitalWrite(Y_STEP_PIN, LOW);
+		digitalWrite(Z_STEP_PIN, LOW);
+		// Opóźnienie
+		delayMicroseconds(speed);
+	}
+	Serial.print("Zakonczono ruch.");
+}
+//komentarz
