@@ -23,16 +23,16 @@
 #define Z_ENABLE_PIN 62
 #define Z_CS_PIN 40
 
-// Zmienne do pobierania liczby krok�w od u�ytkownika
+// Zmienne do pobierania liczby kroków od użytkownika
 String ZawartoscBufora;
 char NowyZnak;
 
-// Zmienne przechowuj�ce stan kra�c�wek
+// Zmienne przechowujące stan krańcówek
 int buttonX;
 int buttonY;
 int buttonZ;
 
-// Zmienne przechowuj�ce ilosc pozostalych krokow
+// Zmienne przechowujące ilosc pozostałych kroków
 int KrokiX = 0;
 int KrokiY = 0;
 int KrokiZ = 0;
@@ -44,25 +44,25 @@ void setup()
 	/* Uruchomienie portu szeregowego */
 	Serial.begin(9600);
 
-	/* Konfiguracja pin�w */
-	// Piny zwi�zane z kra�c�wkami
-	// Kra�c�wka X
+	/* Konfiguracja pinów */
+	// Piny związane z krańcówkami
+	// Krańcówka X
 	pinMode(esX, INPUT);
 	digitalWrite(esX, HIGH);
 
-	// Kra�c�wka Y
+	// Krańcówka Y
 	pinMode(esY, INPUT);
 	digitalWrite(esY, HIGH);
 
-	// Kra�c�wka Z
+	// Krańcówka Z
 	pinMode(esZ, INPUT);
 	digitalWrite(esZ, HIGH);
 
-	// Dodatkowa kra�c�wka
+	// Dodatkowa krańcówka
 	pinMode(esADD, INPUT);
 	digitalWrite(esADD, HIGH);
 
-	// Piny s�u��ce do sterowania silnikami krokowymi
+	// Piny służące do sterowania silnikami krokowymi
 	// Silnik X
 	pinMode(X_DIR_PIN, OUTPUT);
 	digitalWrite(X_DIR_PIN, LOW);
@@ -121,7 +121,7 @@ void loop()
 void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ)
 {
 	/* Realizacja ruchu */
-	// - Dopasowanie kierunku ruchu do wartoci krok�w -
+	// - Dopasowanie kierunku ruchu do wartoci kroków -
 	// Silnik X
 	if (IloscKrokowX < 0)
 	{
@@ -159,7 +159,7 @@ void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ)
 	while (IloscKrokowX > 0 || IloscKrokowY > 0 || IloscKrokowZ > 0)
 	{
 		// Zabezpieczenie silników przed poruszeniem się przy wciniętych krańcówkach
-		// Wczytanie wartoci pinów związanych z krańcówkami
+		// Wczytanie wartości pinów związanych z krańcówkami
 		buttonX = digitalRead(esX);
 		buttonY = digitalRead(esY);
 		buttonZ = digitalRead(esZ);
@@ -212,4 +212,3 @@ void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ)
 	}
 	Serial.print("Zakonczono ruch.");
 }
-//komentarz
