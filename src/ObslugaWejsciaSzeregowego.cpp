@@ -1,5 +1,6 @@
 #include "ObslugaWejsciaSzeregowego.hpp"
 #include "PrzemiescSilniki.hpp"
+#include "Inicjalizuj.hpp"
 /* -- Zmienne modu�owe -- */
 // Zmienne do pobierania liczby krok�w od u�ytkownika
 // Tablica przechowuj�ca zawarto�� bufora
@@ -80,6 +81,13 @@ static int ObsluzNowyZnak(char NowyZnak)
 		}
 
 		ZawartoscBufora[ZajecieBufora++] = 0;
+		if (strcmp(ZawartoscBufora,"init\n") == 0)
+		{
+			ZajecieBufora = 0;
+			Inicjalizuj();
+			return 5;
+		}
+
 		int WynikDzialania = sscanf(ZawartoscBufora, "x %d y %d z %d", &KrokiX, &KrokiY, &KrokiZ);
 
 		// W przypadku b��d�w czy�cimy bufor i wysy�amy odpowiedni komunikat

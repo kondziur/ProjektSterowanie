@@ -43,6 +43,14 @@ set(s,'BaudRate',115200);
 fopen(s);
 pause(1)
 
+fprintf(s,'init');
+Koniec = 0;
+while Koniec == 0%TUTAJ JEST B£¥D
+    Lancuch = fscanf(s,'%s')
+    if Lancuch(1) == 'k'
+        Koniec = 1;
+    end
+end
 
 for t=0:0.1:20
     xc1 = xc + (0.1*sin(t));
