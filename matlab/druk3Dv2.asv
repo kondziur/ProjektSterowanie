@@ -42,8 +42,6 @@ s = serial('COM4');
 set(s,'BaudRate',115200);
 fopen(s);
 pause(1)
-
-
 for t=0:0.1:20
     xc1 = xc + (0.1*sin(t));
     yc1 = yc + (0.1*cos(t));
@@ -76,13 +74,12 @@ for t=0:0.1:20
     if exist('kroki1', 'var')
         tekst = ['x ' num2str(round(kroki1*1000))...
             ' y ' num2str(round(kroki2*1000))...
-            ' z ' num2str(round(kroki3*1000))];
+            ' z ' num2str(round(kroki3*1000))]
         fprintf(s, tekst);
         while s.BytesAvailable==0
         end
         a = fscanf(s,'%s');
     end
-    drawnow();
 end
 
 fclose(s);

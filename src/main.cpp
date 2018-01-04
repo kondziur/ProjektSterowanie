@@ -20,7 +20,7 @@ bool WykonajKolejke = false;
 void setup()
 {
 	/* Uruchomienie portu szeregowego */
-	Serial.begin(9600);
+	Serial.begin(115200);
 
 
 	/* Konfiguracja pin�w */

@@ -7,7 +7,7 @@ void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ)
 {
 	/* -- Zmienne -- */
 	// Czas brany pod uwag� przy op�nieniach
-	unsigned int CzasOpoznienia = 15000 / (2 * PREDKOSC);
+	unsigned int CzasOpoznienia = 1000;
 
 	// Zmienne przechowuj�ce aktualny stan kra�c�wek
 	bool StanKrancowkiX = true;
