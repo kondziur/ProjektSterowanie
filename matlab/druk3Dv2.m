@@ -46,8 +46,8 @@ pause(1)
 fprintf(s,'init');
 Koniec = 0;
 while Koniec == 0%TUTAJ JEST B£¥D
-    Lancuch = fscanf(s,'%s')
-    if Lancuch(1) == 'k'
+    Lancuch = fread(s,1);
+    if Lancuch == 107
         Koniec = 1;
     end
 end
