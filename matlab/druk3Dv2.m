@@ -52,6 +52,8 @@ arm3 = line([x3 xc], [y3 yc], [z3 zc]);
 set(arm3, 'XData',[x3 xc],...
     'YData',[y3 yc],...
     'ZData',[z3 zc]);
+xlim([x1,x2]);
+ylim([y1,y3]);
 view(-130, 36)
 
 hold on
