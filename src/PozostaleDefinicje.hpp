@@ -1,9 +1,6 @@
 #pragma once
 
 
-// Pr�dko�� zdefiniowana w krokach na sekund�
-#define PREDKOSC 10
-
 // Rozmiar bufora przechowuj�cego przechwycone znaki
 #define ROZMIAR_BUFORA 51
 

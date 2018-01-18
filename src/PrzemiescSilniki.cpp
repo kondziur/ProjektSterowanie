@@ -3,11 +3,11 @@
 
 /* Funkcja s�u��ca do przemieszczania silnik�w w poszczeg�lnych osiach. Silniki s� przesuwane z jednakow� pr�dko�ci�.
 W przypadku naci�ni�cia kra�c�wki odpowiadaj�cej danemu silnikowi silnik przestaje porusza� si� w g�r�. */
-void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ)
+void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ, int Predkosc)
 {
 	/* -- Zmienne -- */
 	// Czas brany pod uwag� przy op�nieniach
-	unsigned int CzasOpoznienia = 1000;
+	unsigned int CzasOpoznienia = Predkosc;
 
 	// Zmienne przechowuj�ce aktualny stan kra�c�wek
 	bool StanKrancowkiX = true;

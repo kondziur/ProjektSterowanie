@@ -6,6 +6,6 @@
 #include "PozostaleDefinicje.hpp"
 
 
-/* Funkcja s³u¿¹ca do przemieszczania silników w poszczególnych osiach. Silniki s¹ przesuwane z jednakow¹ prêdkoœci¹.
-W przypadku naciœniêcia krañcówki odpowiadaj¹cej danemu silnikowi silnik przestaje poruszaæ siê w górê. */
-void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ);
+/* Funkcja sï¿½uï¿½ï¿½ca do przemieszczania silnikï¿½w w poszczegï¿½lnych osiach. Silniki sï¿½ przesuwane z jednakowï¿½ prï¿½dkoï¿½ciï¿½.
+W przypadku naciï¿½niï¿½cia kraï¿½cï¿½wki odpowiadajï¿½cej danemu silnikowi silnik przestaje poruszaï¿½ siï¿½ w gï¿½rï¿½. */
+void PrzemiescSilniki(int IloscKrokowX, int IloscKrokowY, int IloscKrokowZ, int Predkosc);

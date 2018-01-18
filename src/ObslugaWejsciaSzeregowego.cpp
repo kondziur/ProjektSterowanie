@@ -112,7 +112,7 @@ static int ObsluzNowyZnak(char NowyZnak)
 		Serial.print("\n");
 #endif
 
-		PrzemiescSilniki(KrokiX, KrokiY, KrokiZ);
+		PrzemiescSilniki(KrokiX, KrokiY, KrokiZ, 1000);
 		return 0;
 	}
 	return 0;

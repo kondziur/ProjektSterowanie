@@ -8,14 +8,14 @@ void Inicjalizuj()
 
     while (StanKrancowkiX == 0 || StanKrancowkiY == 0 || StanKrancowkiZ == 0)
     {
-        PrzemiescSilniki(100,100,100);
+        PrzemiescSilniki(100,100,100,100);
 
         StanKrancowkiX = digitalRead(KRANCOWKA_X);
         StanKrancowkiY = digitalRead(KRANCOWKA_Y);
         StanKrancowkiZ = digitalRead(KRANCOWKA_Z);
     }
 
-    PrzemiescSilniki(OPAD,OPAD,OPAD);
+    PrzemiescSilniki(OPAD,OPAD,OPAD,100);
 
     Serial.print("k\n");
 }

@@ -1,27 +1,45 @@
 %fclose(s);
+% close all; clear;
+% x1 = 0;
+% y1 = 1;
+% z1 = 0;
+% x2 = 0;
+% y2 = 3;
+% z2 = 0;
+% x3 = 3 - ((2 * 3^0.5) / 2);
+% y3 = 2;
+% z3 = 0;
+% xc = x3 / 2;
+% yc = 2;
+% zc = 2;
+% r = 2;
+
 close all; clear;
-x1 = 0;
-y1 = 1;
+x1 = 2;
+y1 = 0;
 z1 = 0;
-x2 = 0;
-y2 = 3;
+x2 = 8;
+y2 = 0;
 z2 = 0;
-x3 = 1;
-y3 = 2;
+x3 = 5;
+y3 = 3*sqrt(3);
 z3 = 0;
-xc = 0.3;
-yc = 2.5;
-zc = 2;
-r = 2;
+xc = 5;
+yc = sqrt(3);
+zc = 0;
+r = 7;
+
+
+
 %x^2 + y^2 + z^2 = 1;
 
 z1 = zc + sqrt(r^2 - (x1 - xc)^2 - (y1 - yc)^2);
 z2 = zc + sqrt(r^2 - (x2 - xc)^2 - (y2 - yc)^2);
 z3 = zc + sqrt(r^2 - (x3 - xc)^2 - (y3 - yc)^2);
 
-col1 = line([x1 x1], [y1 y1], [0 4]);
-col2 = line([x2 x2], [y2 y2], [0 4]);
-col3 = line([x3 x3], [y3 y3], [0 4]);
+col1 = line([x1 x1], [y1 y1], [0 10]);
+col2 = line([x2 x2], [y2 y2], [0 10]);
+col3 = line([x3 x3], [y3 y3], [0 10]);
 arm1 = line([x1 xc], [y1 yc], [z1 zc]);
 set(arm1, 'XData',[x1 xc],...
     'YData',[y1 yc],...
@@ -52,9 +70,9 @@ while Koniec == 0%TUTAJ JEST B£¥D
     end
 end
 
-for t=0:0.1:20
-    xc1 = xc + (0.1*sin(t));
-    yc1 = yc + (0.1*cos(t));
+for t=0:0.05:20
+    xc1 = xc + 6 * (0.1*sin(t));
+    yc1 = yc + 6 * (0.1*cos(t));
     zc = 2;
     z1 = zc + sqrt(r^2 - (x1 - xc1)^2 - (y1 - yc1)^2);
     z2 = zc + sqrt(r^2 - (x2 - xc1)^2 - (y2 - yc1)^2);
